@@ -35,37 +35,88 @@ def hello_world(path=''):
     template = env.get_template('index.html')
     return template.render(path=path, message=Pharrell().get_message())
 
+base_breadcrumbs = [ { 'link': '#', 'name': 'GDS' },
+                    { 'link': '#', 'name': 'Delivery & Support' },
+                    ]
+techops_breadcrumbs = base_breadcrumbs.copy()
+techops_breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations', 'name': 'Technology Operations' })
+cyber_breadcrumbs = techops_breadcrumbs.copy()
+cyber_breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations/cyber', 'name': 'Cyber' })
+re_breadcrumbs = techops_breadcrumbs.copy()
+re_breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations/reliability-engineering', 'name': 'Reliability Engineering' })
 
 @app.route('/teams/gds/delivery-and-support/technology-operations', methods=['GET'])
 def techops_team():
-    template = env.get_template('techops.html')
-    return template.render()
+    with open('data/dummy.json') as f:
+        data = json.load(f)
+
+    template = env.get_template('team-view.html')
+    team = {'name': 'Technology Operations', 'details': 'something something Technology Operations', 'has_subteams': 'true' }
+    breadcrumbs = techops_breadcrumbs.copy()
+    subteams = [ { 'has_subteams': 'true', 'link': '/teams/gds/delivery-and-support/technology-operations/reliability-engineering', 'name': 'Reliability Engineering' },
+                 { 'has_subteams': 'true', 'link': '#', 'name': 'User Support' },
+                 { 'has_subteams': 'true', 'link': '/teams/gds/delivery-and-support/technology-operations/cyber', 'name': 'Cyber Security' },
+                 { 'has_subteams': 'false', 'link': '/teams/gds/delivery-and-support/technology-operations/traceability', 'name': 'Traceability' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'TechOps Homepage' },
+                 ]
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=subteams, metrics=data)
 
 
 @app.route('/teams/gds/delivery-and-support/technology-operations/traceability', methods=['GET'])
 def traceability_team():
-    template = env.get_template('traceability.html')
-    return template.render()
+    with open('data/dummy.json') as f:
+        data = json.load(f)
+
+    template = env.get_template('team-view.html')
+    team = {'name': 'Traceability', 'details': 'something something Traceability', 'has_subteams': 'false' }
+    breadcrumbs = techops_breadcrumbs.copy()
+    breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations/traceability', 'name': team['name'] })
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=[], metrics=data)
 
 
 @app.route('/teams/gds/delivery-and-support/technology-operations/cyber', methods=['GET'])
 def cyber_team():
-    template = env.get_template('cyber.html')
-    return template.render()
+    with open('data/dummy.json') as f:
+        data = json.load(f)
+
+    template = env.get_template('team-view.html')
+    team = {'name': 'Cyber', 'details': 'something something Cyber', 'has_subteams': 'true' }
+    breadcrumbs = cyber_breadcrumbs.copy()
+    subteams = [ { 'has_subteams': 'false', 'link': '#', 'name': 'Engage' },
+                 { 'has_subteams': 'false', 'link': '/teams/gds/delivery-and-support/technology-operations/cyber/tooling', 'name': 'Tooling' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'Operational Intelligence' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'Consult' },
+                 ]
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=subteams, metrics=data)
 
 @app.route('/teams/gds/delivery-and-support/technology-operations/cyber/tooling', methods=['GET'])
 def cyber_tooling_team():
     with open('data/CT.json') as f:
         data = json.load(f)
 
-    template = env.get_template('cyber-tooling.html')
-    return template.render(metrics=data)
+    template = env.get_template('team-view.html')
+    team = {'name': 'Tooling', 'details': 'something something Cyber Tooling', 'has_subteams': 'false' }
+    breadcrumbs = cyber_breadcrumbs.copy()
+    breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations/cyber/tooling', 'name': team['name'] })
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=[], metrics=data)
 
 
 @app.route('/teams/gds/delivery-and-support/technology-operations/reliability-engineering', methods=['GET'])
 def re_team():
-    template = env.get_template('reliability-engineering.html')
-    return template.render()
+    with open('data/dummy.json') as f:
+        data = json.load(f)
+
+    template = env.get_template('team-view.html')
+    team = {'name': 'Reliability Engineering', 'details': 'something something Reliability Engineering', 'has_subteams': 'true' }
+    breadcrumbs = re_breadcrumbs.copy()
+    subteams = [ { 'has_subteams': 'false', 'link': '#', 'name': 'New Platform - Build' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'New Platform - Run' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'New Platform - Observe' },
+                 { 'has_subteams': 'false', 'link': '/teams/gds/delivery-and-support/technology-operations/reliability-engineering/paas', 'name': 'GOV.UK PaaS' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'GOV.UK Migration' },
+                 { 'has_subteams': 'false', 'link': '#', 'name': 'Automate' },
+                 ]
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=subteams, metrics=data)
 
 
 @app.route('/teams/gds/delivery-and-support/technology-operations/reliability-engineering/paas', methods=['GET'])
@@ -73,8 +124,11 @@ def paas_team():
     with open('data/paas.json') as f:
         data = json.load(f)
 
-    template = env.get_template('paas.html')
-    return template.render(metrics=data)
+    template = env.get_template('team-view.html')
+    team = {'name': 'GOV.UK PaaS', 'details': 'something something GOV.UK PaaS', 'has_subteams': 'false' }
+    breadcrumbs = re_breadcrumbs.copy()
+    breadcrumbs.append({ 'link': '/teams/gds/delivery-and-support/technology-operations/reliability-engineering/paas', 'name': team['name'] })
+    return template.render(team=team, breadcrumbs=breadcrumbs, subteams=[], metrics=data)
 
 
 @app.errorhandler(404)
